@@ -1,8 +1,10 @@
 package org.example
 
 import java.io.File
+import java.lang.reflect.InvocationTargetException
 import java.net.URL
 import java.net.URLClassLoader
+
 
 class JarLoader {
     lateinit var engineClass:Class<*>
@@ -22,6 +24,11 @@ class JarLoader {
 
     fun commandEngine(command:String):String{
         val method = engineClass.getDeclaredMethod("parseInput", String::class.java)
-        return method.invoke(engineInstance,command) as String
+        return try {
+            method.invoke(engineInstance,command) as String
+        } catch (e: InvocationTargetException) {
+            // should never get called.
+            "error"
+        }
     }
 }

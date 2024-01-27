@@ -1,3 +1,5 @@
+import org.codehaus.groovy.ast.tools.GeneralUtils.args
+
 plugins {
     kotlin("jvm") version "1.9.21"
 }
