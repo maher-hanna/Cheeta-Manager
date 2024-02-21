@@ -85,7 +85,7 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
                 positions[random.nextInt(positions.size)] ?: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 "
             if (currentPlayerIndex == 0) {
                 firstJarLoader.commandEngine("position fen $randomPosition")
-                val gameStatusResponse = firstJarLoader.commandEngine("check_status")
+                val gameStatusResponse = secondJarLoader.commandEngine("check_status")
                 // game status : 0 not finished, 1 draw, 2 white winds, 3 black wins
                 val statusCode = gameStatusResponse.toInt()
                 if (statusCode != 0) {
@@ -98,7 +98,7 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
                 }
             } else {
                 secondJarLoader.commandEngine("position fen $randomPosition")
-                val gameStatusResponse = firstJarLoader.commandEngine("check_status")
+                val gameStatusResponse = secondJarLoader.commandEngine("check_status")
                 // game status : 0 not finished, 1 draw, 2 white winds, 3 black wins
                 val statusCode = gameStatusResponse.toInt()
                 if (statusCode != 0) {
@@ -130,7 +130,7 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
                     }
                 }
                 println("position fen $randomPosition moves $movesList")
-                val gameStatusResponse = firstJarLoader.commandEngine("check_status")
+                val gameStatusResponse = secondJarLoader.commandEngine("check_status")
                 // game status : 0 not finished, 1 draw, 2 white winds, 3 black wins
                 val statusCode = gameStatusResponse.toInt()
                 isCurrentGameFinished = statusCode != 0
