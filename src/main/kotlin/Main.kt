@@ -129,7 +129,7 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
                         movesList += splits[1] + " "
                     }
                 }
-                println(movesList)
+                println("position fen $randomPosition moves $movesList")
                 val gameStatusResponse = firstJarLoader.commandEngine("check_status")
                 // game status : 0 not finished, 1 draw, 2 white winds, 3 black wins
                 val statusCode = gameStatusResponse.toInt()
