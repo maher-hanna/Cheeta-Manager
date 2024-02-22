@@ -89,7 +89,7 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
                 // game status : 0 not finished, 1 draw, 2 white winds, 3 black wins
                 val statusCode = gameStatusResponse.toInt()
                 if (statusCode != 0) {
-                    continue
+                    break
                 }
                 val move = firstJarLoader.commandEngine("go infinite")
                 val splits = move.trim().split("\\s+".toRegex())
@@ -102,7 +102,7 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
                 // game status : 0 not finished, 1 draw, 2 white winds, 3 black wins
                 val statusCode = gameStatusResponse.toInt()
                 if (statusCode != 0) {
-                    continue
+                    break
                 }
                 val move = secondJarLoader.commandEngine("go infinite")
                 val splits = move.trim().split("\\s+".toRegex())
@@ -113,27 +113,16 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
             while (!isCurrentGameFinished) {
                 // flip current player index from 0 to 1 and vice versa
                 currentPlayerIndex = currentPlayerIndex xor 1
-
-                if (currentPlayerIndex == 0) {
+                val gameStatusResponse = if (currentPlayerIndex == 0) {
                     firstJarLoader.commandEngine("position fen $randomPosition moves $movesList")
-                    val move = firstJarLoader.commandEngine("go infinite")
-                    val splits = move.trim().split("\\s+".toRegex())
-                    if (splits.size > 1) {
-                        movesList += splits[1] + " "
-                    }
+                    firstJarLoader.commandEngine("check_status")
                 } else {
                     secondJarLoader.commandEngine("position fen $randomPosition moves $movesList")
-                    val move = secondJarLoader.commandEngine("go infinite")
-                    val splits = move.trim().split("\\s+".toRegex())
-                    if (splits.size > 1) {
-                        movesList += splits[1] + " "
-                    }
+                    secondJarLoader.commandEngine("check_status")
                 }
-                println("position fen $randomPosition moves $movesList")
-                val gameStatusResponse = secondJarLoader.commandEngine("check_status")
                 // game status : 0 not finished, 1 draw, 2 white winds, 3 black wins
                 val statusCode = gameStatusResponse.toInt()
-                isCurrentGameFinished = statusCode != 0
+                isCurrentGameFinished = (statusCode != 0)
                 if (isCurrentGameFinished) {
                     when (statusCode) {
                         1 -> firstEngineDraws += 1
@@ -153,7 +142,24 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
                             }
                         }
                     }
+                    break
                 }
+
+                if (currentPlayerIndex == 0) {
+                    val move = firstJarLoader.commandEngine("go infinite")
+                    val splits = move.trim().split("\\s+".toRegex())
+                    if (splits.size > 1) {
+                        movesList += splits[1] + " "
+                    }
+                } else {
+                    val move = secondJarLoader.commandEngine("go infinite")
+                    val splits = move.trim().split("\\s+".toRegex())
+                    if (splits.size > 1) {
+                        movesList += splits[1] + " "
+                    }
+                }
+                println("position fen $randomPosition moves $movesList")
+
             }
             currentGameNumber += 1
         }
@@ -161,8 +167,12 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
         println("wins: $firstEngineWins draws: $firstEngineDraws loses: $firstEngineLoses")
     } catch (e: IllegalStateException) {
         println("System.in was closed; exiting")
+        println("wins: $firstEngineWins draws: $firstEngineDraws loses: $firstEngineLoses")
+
     } catch (e: NoSuchElementException) {
         println("System.in was closed; exiting")
+        println("wins: $firstEngineWins draws: $firstEngineDraws loses: $firstEngineLoses")
+
     }catch (e: Exception){
         println("Error occurred:")
         println("First engine results compared to second engine are:")
