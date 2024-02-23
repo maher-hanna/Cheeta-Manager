@@ -89,7 +89,7 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
                 // game status : 0 not finished, 1 draw, 2 white winds, 3 black wins
                 val statusCode = gameStatusResponse.toInt()
                 if (statusCode != 0) {
-                    break
+                    continue
                 }
                 val move = firstJarLoader.commandEngine("go infinite")
                 val splits = move.trim().split("\\s+".toRegex())
@@ -102,7 +102,7 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
                 // game status : 0 not finished, 1 draw, 2 white winds, 3 black wins
                 val statusCode = gameStatusResponse.toInt()
                 if (statusCode != 0) {
-                    break
+                    continue
                 }
                 val move = secondJarLoader.commandEngine("go infinite")
                 val splits = move.trim().split("\\s+".toRegex())
@@ -155,6 +155,7 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
                     val move = secondJarLoader.commandEngine("go infinite")
                     val splits = move.trim().split("\\s+".toRegex())
                     if (splits.size > 1) {
+
                         movesList += splits[1] + " "
                     }
                 }
