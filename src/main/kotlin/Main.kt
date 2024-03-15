@@ -67,7 +67,7 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
     firstJarLoader.loadEngineJar(firstEnginePath)
     val secondJarLoader = JarLoader()
     secondJarLoader.loadEngineJar(secondEnginePath)
-    val numberOfGames = 30
+    val numberOfGames = 20
     var currentGameNumber = 1
     var isCurrentGameFinished: Boolean
     var movesList: String
@@ -91,7 +91,7 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
                 if (statusCode != 0) {
                     continue
                 }
-                val move = firstJarLoader.commandEngine("go infinite")
+                val move = firstJarLoader.commandEngine("go movetime 4000")
                 val splits = move.trim().split("\\s+".toRegex())
                 if (splits.size > 1) {
                     movesList += splits[1] + " "
@@ -104,7 +104,7 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
                 if (statusCode != 0) {
                     continue
                 }
-                val move = secondJarLoader.commandEngine("go infinite")
+                val move = secondJarLoader.commandEngine("go movetime 4000")
                 val splits = move.trim().split("\\s+".toRegex())
                 if (splits.size > 1) {
                     movesList += splits[1] + " "
@@ -146,13 +146,13 @@ fun compareEngines(firstEnginePath: String, secondEnginePath: String) {
                 }
 
                 if (currentPlayerIndex == 0) {
-                    val move = firstJarLoader.commandEngine("go infinite")
+                    val move = firstJarLoader.commandEngine("go movetime 4000")
                     val splits = move.trim().split("\\s+".toRegex())
                     if (splits.size > 1) {
                         movesList += splits[1] + " "
                     }
                 } else {
-                    val move = secondJarLoader.commandEngine("go infinite")
+                    val move = secondJarLoader.commandEngine("go movetime 4000")
                     val splits = move.trim().split("\\s+".toRegex())
                     if (splits.size > 1) {
 
